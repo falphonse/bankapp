@@ -8,19 +8,19 @@ def home(request: HttpRequest):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
-        if Account.objects.filter(username=username).exists():
-            user = Account.objects.get(username=username)
-            login(request, user)
-            return redirect('bank_management')
-        else:
-            user = Account.objects.create_user(
-                username=username,
-                password=password,
-            )
-            user.save()
-            login(request, user)
-            return redirect('step_1')
+        if username and password:
+            if Account.objects.filter(username=username).exists():
+                user = Account.objects.get(username=username)
+                login(request, user)
+                return redirect('bank_management')
+            else:
+                user = Account.objects.create_user(
+                    username=username,
+                    password=password,
+                )
+                user.save()
+                login(request, user)
+                return redirect('step_1')
     
     return render(request, 'bank_management/home.html', context)
 
